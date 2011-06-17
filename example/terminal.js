@@ -49,7 +49,12 @@ bot.addListener('kick', function(channel, who, by, reason) {
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', function(chunk) {
-    bot.say(channel, chunk);
+    if (chunk.match(/\/exit/i)) {
+        bot.disconnect("disconnecting - nodebot terminal client");
+        process.exit(0);
+    } else {
+        bot.say(channel, chunk);
+    }
 });
 
 

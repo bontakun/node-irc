@@ -22,7 +22,7 @@ var irc = require('irc');
 var bot = new irc.Client(server, nick, {
 	port: 6697,
     secure: true,
-    debug: false,
+    debug: true,
     channels: [channel],
 });
 

@@ -23,7 +23,7 @@ var bot = new irc.Client(server, nick, {
 	port: 6697,
     secure: true,
     debug: true,
-    channels: [channel],
+    channels: [channel]
 });
 
 bot.addListener('error', function(message) {

@@ -70,3 +70,17 @@ All commands and events are documented in `API.md` (hopefully). I hope to make
 a more complete set of events/commands over the next few weeks.
 
 [npm]: http://github.com/isaacs/npm
+
+
+How to run tests
+----------------
+
+First setup expresso doing the following (NPM installation does not work).
+
+git clone git://github.com/visionmedia/expresso.git
+cd expresso
+git submodule init
+git submodule update
+npm link
+
+Now just type 'expresso' from the root of the project and it should run all the tests.

@@ -1,7 +1,7 @@
 {
     "name" : "irc",
     "description" : "An IRC client library for node",
-    "version" : "0.2.0",
+    "version" : "0.2.1",
     "author" : "Benjamin Dow <benjamin.dow@gmail.com>",
     "contributors" : [],
     "repository" : {
@@ -18,4 +18,7 @@
         "type" : "GPL",
         "url" : "http://github.com/bontakun/node-irc/raw/master/COPYING"
     } ]
+    "dependencies": {
+      "expresso": "0.7.9"
+  	}
 }

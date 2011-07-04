@@ -5,46 +5,63 @@ require.paths.unshift(__dirname + '/../lib');
 
 var irc = require('irc');
 var assert = require('assert');
-var util = require('util') 
 
-var server = 'irc.gatewayy.net';
-var channel = '#botwars';
-var nick = 'nodebot';
+var defaultServer = 'irc.freenode.net';
+var defaultChannel = '#botwars';
+var defaultNick = 'nodeTestBot';
 
-module.exports = {
-    'test irc#testEmptyServer': function(){
-        assert.throws(function() {
-        	var bot = new irc.Client(null, nick, {
-						port: 6697,
-					  secure: true,
-					  debug: true,
-					  channels: [channel]
-					});
-        },
-        /server is null or empty\, this is invalid/);
+function getDefaultServerOptions() {
+  return {
+      port: 6665, secure: false, debug: true,
+      retryCount: 0, channels: []};
+}
+
+exports.testIrcEmptyServer = function() {
+  assert.throws(function() {
+      var bot = new irc.Client(null, defaultNick, getDefaultServerOptions());
     },
-    
-    'test irc#testEmptyNick': function(){
-        assert.throws(function() {
-        	var bot = new irc.Client(server, null, {
-						port: 6697,
-					  secure: true,
-					  debug: true,
-					  channels: [channel]
-					});
-        },
-        /nick is null or empty\, this is invalid/);
+    /server is null or empty\, this is invalid/);
+}
+
+exports.testIrcEmptyNick = function() {
+  assert.throws(function() {
+      var bot = new irc.Client(defaultServer, null, getDefaultServerOptions());
     },
-    
-    'test irc#testNickWithSpace': function(){
-        assert.throws(function() {
-        	var bot = new irc.Client(server, "foo bar", {
-						port: 6697,
-					  secure: true,
-					  debug: true,
-					  channels: [channel]
-					});
-        },
-        /username contains a space\, this is invali/);
-    }
-};
+    /nick is null or empty\, this is invalid/);
+}
+
+exports.testIrcNickWithSpace = function() {
+  assert.throws(function() {
+      var bot = new irc.Client(defaultServer, "foo bar", getDefaultServerOptions());
+    },
+    /username contains a space\, this is invalid/);
+}
+
+exports.testIrcFastConnectionDisconnect = function() {
+  var bot = new irc.Client(defaultServer, defaultNick, getDefaultServerOptions());
+  bot.disconnect();
+}
+
+exports.testIrcChannelJoin = function() {
+  var connectOptions = getDefaultServerOptions();
+  connectOptions.channels.push(defaultChannel);
+  
+  var channelJoined = false;
+
+  var bot = new irc.Client(defaultServer, defaultNick, connectOptions);
+  bot.addListener('join', function(channel, who) {
+    console.log('%s has joined %s', who, channel);
+    channelJoined = true;
+    bot.disconnect();
+  });
+  setTimeout(function() {assert.ok(channelJoined, "gave it 15 seconds to connect and join the channel, looks like that failed for some reason, double check the logs.");}, 15000);
+}
+
+exports.testIrcFastConnectionDisconnectSecure = function() {
+  var connectOptions = getDefaultServerOptions();
+  connectOptions.secure = true;
+  connectOptions.port = 6697;
+
+  var bot = new irc.Client(defaultServer, defaultNick, connectOptions);
+  bot.disconnect();
+}

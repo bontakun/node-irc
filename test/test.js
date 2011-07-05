@@ -77,7 +77,10 @@ exports.testIrcChannelJoin = function() {
     bot.disconnect();
   });
   
-  setTimeout(function() {assert.ok(channelJoined, "gave it 15 seconds to connect and join the channel, looks like that failed for some reason, double check the logs.");}, 15000);
+  setTimeout(function() {
+  	assert.ok(channelJoined, "gave it 15 seconds to connect and join the channel, looks like that failed for some reason, double check the logs.");
+  	bot.disconnect();
+  }, 15000);
 }
 
 ////////
@@ -111,7 +114,10 @@ exports.testIrcChannelJoinSecure = function() {
     bot.disconnect();
   });
   
-  setTimeout(function() {assert.ok(channelJoined, "gave it 15 seconds to connect and join the channel, looks like that failed for some reason, double check the logs.");}, 15000);
+  setTimeout(function() {
+  	assert.ok(channelJoined, "gave it 15 seconds to connect and join the channel, looks like that failed for some reason, double check the logs.");
+  	bot.disconnect();
+  }, 15000);
 }
 
 ////////
@@ -153,9 +159,10 @@ exports.testIrcTalkingInChannel = function() {
 
   var insecureBot = new irc.Client(defaultServer, defaultNick, connectOptions);
   insecureBot.addListener('join', function(channel, who) {
-    insecureBotIn = true;
-    if (insecureBotIn && secureBotIn)
+    if (secureBotIn)
     	haveConversation();
+    else 
+      insecureBotIn = true;
   });
 
 	connectOptions = getDefaultServerOptions();
@@ -165,9 +172,9 @@ exports.testIrcTalkingInChannel = function() {
 
   var secureBot = new irc.Client(defaultServer, defaultNick, connectOptions);
   secureBot.addListener('join', function(channel, who) {
-    secureBotIn = true;
-    if (insecureBotIn && secureBotIn)
+    if (insecureBotIn)
     	haveConversation();
+    else 
+    	secureBotIn = true;
   });
-  
 }

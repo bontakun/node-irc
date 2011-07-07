@@ -4,7 +4,7 @@
 require.paths.unshift(__dirname + '/../lib');
 
 var server = 'irc.gatewayy.net';
-var channel = '#public';
+var channel = '#botwars';
 var nick = 'nodebot';
 
 if (process.argv[2]) {
